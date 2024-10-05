@@ -1,0 +1,33 @@
+onPressed: () async {
+          for (int i = 0; i < 4; i++) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Receiving Data ($i/4)...")),
+            );
+            _sendMessage(_selectedFrameSize);
+            await Future.delayed(Duration(seconds: 10));
+          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Received")),
+          );
+        },
+
+
+
+         body: SafeArea(
+        child: isConnected
+            ? Column(
+                children: <Widget>[
+                  // selectFrameSize(),
+                  shotButton(),
+                ],
+              )
+            : Center(
+                child: Text(
+                  "Connecting...",
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ),
+      ),
