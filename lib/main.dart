@@ -1,4 +1,6 @@
 import 'package:c_alert/blogapi.dart';
+import 'package:c_alert/login.dart';
+import 'package:c_alert/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:go_router/go_router.dart';
@@ -35,6 +37,20 @@ class MyApp extends StatelessWidget {
           currentIndex: 0,
         ),
         routes: [
+          GoRoute(
+            path: 'login',
+            builder: (context, state) => Nav(
+              child: LoginPage(),
+              currentIndex: 0,
+            ),
+          ),
+          GoRoute(
+            path: 'signup',
+            builder: (context, state) => Nav(
+              child: SignUpPage(),
+              currentIndex: 0,
+            ),
+          ),
           GoRoute(
             path: 'new_test',
             builder: (context, state) => Nav(
@@ -80,6 +96,20 @@ class MyApp extends StatelessWidget {
               ),
           routes: [
             GoRoute(
+              path: 'login',
+              builder: (context, state) => Nav(
+                child: LoginPage(),
+                currentIndex: 0,
+              ),
+            ),
+            GoRoute(
+              path: 'signup',
+              builder: (context, state) => Nav(
+                child: SignUpPage(),
+                currentIndex: 0,
+              ),
+            ),
+            GoRoute(
               path: 'previous_tests',
               builder: (context, state) => Nav(
                 child: const PreviousTestsPage(),
@@ -102,6 +132,20 @@ class MyApp extends StatelessWidget {
           currentIndex: 2,
         ),
         routes: [
+          GoRoute(
+            path: 'login',
+            builder: (context, state) => Nav(
+              child: LoginPage(),
+              currentIndex: 0,
+            ),
+          ),
+          GoRoute(
+            path: 'signup',
+            builder: (context, state) => Nav(
+              child: SignUpPage(),
+              currentIndex: 0,
+            ),
+          ),
           GoRoute(
             path: 'new_test',
             builder: (context, state) => Nav(

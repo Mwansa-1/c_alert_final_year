@@ -26,11 +26,11 @@ class AlertPost {
 
 class AlertApi {
   static const String baseUrl =
-      'http://192.168.20.222:8000/'; // Update to your base URL
+      'http://192.168.124.222:8000'; // Update to your base URL
 
   Future<List<AlertPost>> fetchAlertPosts() async {
-    final response =
-        await http.get(Uri.parse('$baseUrl/alert_list')); // Adjust the endpoint
+    final response = await http
+        .get(Uri.parse('$baseUrl/alerts_list')); // Adjust the endpoint
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(response.body);

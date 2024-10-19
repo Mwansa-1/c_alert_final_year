@@ -3,6 +3,7 @@ import 'package:c_alert/blog_details.dart';
 import 'package:c_alert/blogapi.dart';
 import 'package:c_alert/result.dart';
 import 'package:c_alert/resultsapi.dart';
+import 'package:c_alert/statisticsApi.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -20,12 +21,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Future<Resultsapi> futureLatestTest;
   late Future<BlogPost> futureLatestBlog;
+  late Future<Statisticsapi> futureLatestStat;
 
   @override
   void initState() {
     super.initState();
     futureLatestTest = ResultsApi().fetchLatestTest();
     futureLatestBlog = BlogApi().fetchLatestBlog();
+    futureLatestStat = StatisticsApi().fetchLatestStat();
   }
 
   @override
@@ -60,6 +63,8 @@ class _HomePageState extends State<HomePage> {
                 case 'Settings':
                   // Navigate to Settings page
                   break;
+                // if the user is authenticated change the sign in to sign out
+
                 case 'Sign In':
                   context.go('/login');
                   break;
@@ -109,7 +114,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(40.0, 40.0, 40.0, 0.0),
+              padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -129,86 +134,108 @@ class _HomePageState extends State<HomePage> {
                               )
                             ],
                             borderRadius: BorderRadius.circular(10.0)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // Number of cases
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "100",
-                                      style: TextStyle(
-                                        fontSize: 60.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.add,
-                                      size: 30.0,
-                                      color: Colors.red,
-                                      weight: 15.0,
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  "  New Cases",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ),
-                                ),
-                                SizedBox(height: 20.0),
-                                // Date
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.date_range_outlined,
-                                          size: 30.0,
-                                        ),
-                                        Text(
-                                          "  14/05/24",
-                                          style: TextStyle(
-                                            color: Colors.red,
+                        child: FutureBuilder<Statisticsapi>(
+                          future: futureLatestStat,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            } else if (!snapshot.hasData) {
+                              return Center(child: Text('No test available'));
+                            } else {
+                              Statisticsapi latestStat = snapshot.data!;
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      // Number of cases
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            latestStat.positive_cases
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 60.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.red,
+                                            ),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(height: 5.0),
-                                    Row(
-                                      children: [
-                                        // Icon(
-                                        //   Icons.link,
-                                        //   size: 30.0,
-                                        // ),
-                                        // TextButton(
-                                        //   onPressed: () => GoRouter.of(context)
-                                        //       .go('/more_info'),
-                                        //   child: Text(
-                                        //     "More Info",
-                                        //     style: TextStyle(
-                                        //       color: Colors.black,
-                                        //       decoration:
-                                        //           TextDecoration.underline,
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ],
+                                          Icon(
+                                            Icons.add,
+                                            size: 30.0,
+                                            color: Colors.red,
+                                            weight: 15.0,
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        "  New Cases",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      SizedBox(height: 20.0),
+                                      // Date
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.date_range_outlined,
+                                                size: 30.0,
+                                              ),
+                                              Text(
+                                                " ${latestStat.date}",
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(height: 5.0),
+                                          Row(
+                                            children: [
+                                              // Icon(
+                                              //   Icons.link,
+                                              //   size: 30.0,
+                                              // ),
+                                              // TextButton(
+                                              //   onPressed: () => GoRouter.of(context)
+                                              //       .go('/more_info'),
+                                              //   child: Text(
+                                              //     "More Info",
+                                              //     style: TextStyle(
+                                              //       color: Colors.black,
+                                              //       decoration:
+                                              //           TextDecoration.underline,
+                                              //     ),
+                                              //   ),
+                                              // ),
+                                            ],
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -308,6 +335,13 @@ class _HomePageState extends State<HomePage> {
                                                 style: const TextStyle(
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                "${latestTest.date} ",
+                                                style: TextStyle(
+                                                  color: Colors.black
+                                                      .withOpacity(0.6),
                                                 ),
                                               ),
                                               SizedBox(
@@ -415,7 +449,12 @@ class _HomePageState extends State<HomePage> {
                                         );
                                       },
                                       tileColor: Colors.white,
-                                      title: Text(latestBlog.title),
+                                      title: Text(
+                                        latestBlog.title,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                       subtitle:
                                           Text(latestBlog.briefDescription),
                                     ),

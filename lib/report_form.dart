@@ -13,7 +13,7 @@ class ReportFormApi {
     File? processedImage,
   }) async {
     // API URL for form submission
-    final String apiUrl = 'http://192.168.20.222:8000/report_form_create';
+    final String apiUrl = 'http://172.24.144.1:8000/report_form_create';
 
     try {
       // Create a Multipart request

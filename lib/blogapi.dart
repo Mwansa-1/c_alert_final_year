@@ -31,7 +31,7 @@ class BlogPost {
 }
 
 class BlogApi {
-  static const String baseUrl = 'http://192.168.20.222:8000/';
+  static const String baseUrl = 'http://192.168.124.222:8000';
 
   Future<List<BlogPost>> fetchBlogPosts() async {
     final response = await http.get(Uri.parse('$baseUrl/blog_list'));

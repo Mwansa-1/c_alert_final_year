@@ -39,7 +39,7 @@ class Resultsapi {
 }
 
 class ResultsApi {
-  static const String baseUrl = 'http://192.168.20.222:8000/';
+  static const String baseUrl = 'http://192.168.124.222:8000';
 
   Future<List<Resultsapi>> fetchResults() async {
     final response = await http.get(Uri.parse('$baseUrl/report_form_list'));
